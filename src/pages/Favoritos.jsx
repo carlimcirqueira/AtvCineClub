@@ -1,50 +1,47 @@
 import { useContext } from "react";
-import { FavoritosContext } from "../contexts/FavoritosContext"; // 1. Importar o contexto
+import { FavoritosContext } from "../contexts/FavoritosContext";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export default function Favoritos() {
-  // 2. Puxar a lista de favoritos e a função de remover do contexto global
   const { favoritos, removerFavorito } = useContext(FavoritosContext);
+  const { tema } = useContext(ThemeContext);
 
-  // 3. Validação caso a lista esteja vazia
+  // Mensagem de feedback caso a lista esteja vazia (Exigência do Passo 9)
   if (favoritos.length === 0) {
     return (
-      <div style={{ textAlign: "center", marginTop: "40px" }}>
-        <h1>Meus Filmes Favoritos</h1>
-        <p>Ainda não adicionou nenhum filme aos favoritos. Vá até à Home!</p>
+      <div style={{ textAlign: "center", padding: "60px 20px" }}>
+        <h1 style={{ fontSize: "2.5rem", marginBottom: "15px" }}>Meus Favoritos</h1>
+        <p style={{ fontSize: "1.2rem", color: "#94a3b8" }}>Sua lista de favoritos está vazia no momento. ✨</p>
       </div>
     );
   }
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h1>Meus Filmes Favoritos</h1>
+    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Meus Favoritos</h1>
       
       <div style={{ 
-        display: "flex", justifyContent: "center", gap: "20px", flexWrap: "wrap", marginTop: "30px" 
+        display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 0.3fr))", gap: "30px", justifyContent: "center"
       }}>
-        {/* 4. Mapear e renderizar a lista de favoritos */}
         {favoritos.map((filme) => (
           <div key={filme.id} style={{ 
-            border: "1px solid #555", borderRadius: "8px", padding: "15px", width: "180px",
-            background: "rgba(255, 255, 255, 0.05)"
+            background: tema === "claro" ? "#ffffff" : "#1e293b",
+            borderRadius: "12px", overflow: "hidden",
+            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.3)"
           }}>
-            <img 
-              src={filme.poster} 
-              alt={filme.titulo} 
-              style={{ width: "100%", height: "230px", objectFit: "cover", borderRadius: "4px" }} 
-            />
-            <h3 style={{ fontSize: "16px", margin: "10px 0" }}>{filme.titulo}</h3>
-            
-            {/* Botão para acionar a remoção */}
-            <button 
-              onClick={() => removerFavorito(filme.id)}
-              style={{ 
-                width: "100%", padding: "6px", background: "red", color: "white", 
-                border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold"
-              }}
-            >
-              Remover ×
-            </button>
+            <img src={filme.poster} alt={filme.titulo} style={{ width: "100%", height: "300px", objectFit: "cover" }} />
+            <div style={{ padding: "15px", textAlign: "center" }}>
+              <h3 style={{ fontSize: "1rem", margin: "0 0 15px 0", minHeight: "40px" }}>{filme.titulo}</h3>
+              <button 
+                onClick={() => removerFavorito(filme.id)}
+                style={{ 
+                  width: "100%", padding: "8px", background: "#ef4444", color: "white", 
+                  border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "bold"
+                }}
+              >
+                Remover ×
+              </button>
+            </div>
           </div>
         ))}
       </div>

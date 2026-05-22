@@ -1,42 +1,70 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import { FavoritosContext } from "../contexts/FavoritosContext"; // 1. Importar o contexto
-
-const DETALHES_MOCK = {
-  "1": { id: "1", titulo: "Inception", sinopse: "Um ladrão que rouba segredos...", diretor: "Christopher Nolan", elenco: "Leonardo DiCaprio...", poster: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80" },
-  "2": { id: "2", titulo: "Interestelar", sinopse: "Uma equipe de exploradores...", diretor: "Christopher Nolan", elenco: "Matthew McConaughey...", poster: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=80" },
-  "3": { id: "3", titulo: "Batman: O Cavaleiro das Trevas", sinopse: "Quando a ameaça...", diretor: "Christopher Nolan", elenco: "Christian Bale...", poster: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=400&q=80" }
-};
+import { obterFilmePorId } from "../services/filmeService";
+import { FavoritosContext } from "../contexts/FavoritosContext";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export default function DetalhesFilme() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [filme, setFilme] = useState(null);
+  const [erro, setErro] = useState(null); // Estado para capturar erros de carregamento
   
-  // 2. Puxar a função adicionarFavorito usando o useContext
   const { adicionarFavorito } = useContext(FavoritosContext);
+  const { tema } = useContext(ThemeContext);
 
   useEffect(() => {
-    setFilme(DETALHES_MOCK[id]);
+    try {
+      const filmeEncontrado = obterFilmePorId(id);
+      setFilme(filmeEncontrado);
+    } catch (err) {
+      setErro(err.message); // Exibe mensagem amigável de erro se falhar
+    }
   }, [id]);
 
-  if (!filme) return <p style={{ textAlign: "center" }}>Filme não encontrado!</p>;
+  if (erro) {
+    return (
+      <div style={{ textAlign: "center", padding: "40px" }}>
+        <h2 style={{ color: "red" }}>⚠️ {erro}</h2>
+        <button onClick={() => navigate("/")} style={{ padding: "10px 20px", marginTop: "20px", cursor: "pointer" }}>
+          Voltar para Home
+        </button>
+      </div>
+    );
+  }
+
+  if (!filme) return <p style={{ textAlign: "center" }}>Carregando...</p>;
 
   return (
-    <div style={{ maxWidth: "600px", margin: "30px auto", display: "flex", gap: "30px", alignItems: "start" }}>
-      <img src={filme.poster} alt={filme.titulo} style={{ width: "220px", borderRadius: "8px" }} />
+    <div style={{ 
+      maxWidth: "900px", 
+      margin: "40px auto", 
+      display: "flex", 
+      gap: "40px", 
+      flexWrap: "wrap",
+      background: tema === "claro" ? "#ffffff" : "#1e293b",
+      padding: "30px",
+      borderRadius: "16px",
+      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.4)"
+    }}>
+      <img 
+        src={filme.poster} 
+        alt={filme.titulo} 
+        style={{ width: "300px", borderRadius: "8px", margin: "0 auto", display: "block" }} 
+      />
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-        <h1>{filme.titulo}</h1>
-        <p><strong>Sinopse:</strong> {filme.sinopse}</p>
+      <div style={{ flex: "1", minWidth: "300px", display: "flex", flexDirection: "column", gap: "15px" }}>
+        <h1 style={{ margin: 0, borderBottom: "2px solid #f59e0b", paddingBottom: "10px" }}>{filme.titulo}</h1>
+        <p style={{ lineHeight: "1.6" }}><strong>Sinopse:</strong> {filme.sinopse}</p>
         <p><strong>Diretor:</strong> {filme.diretor}</p>
         <p><strong>Elenco:</strong> {filme.elenco}</p>
         
-        {/* 3. CONECTAR A FUNÇÃO NO EVENTO ONCLICK DO BOTÃO */}
         <button 
-          onClick={() => adicionarFavorito(filme)}
+          onClick={() => adicionarFavorito(filme)} // Dispara o feedback "Filme adicionado!" configurado no passo 8
           style={{ 
-            padding: "10px 15px", background: "#00ffcc", color: "#000", 
-            border: "none", borderRadius: "4px", fontWeight: "bold", cursor: "pointer", marginTop: "10px"
+            padding: "12px 20px", background: "#f59e0b", color: "#fff", 
+            border: "none", borderRadius: "6px", fontWeight: "bold", cursor: "pointer", 
+            marginTop: "auto", fontSize: "1rem"
           }}
         >
           ♥ Adicionar aos Favoritos

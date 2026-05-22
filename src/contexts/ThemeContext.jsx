@@ -3,27 +3,26 @@ import { createContext, useState, useEffect } from "react";
 export const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
- 
-  const [tema, setTema] = useState("claro");
+  const [tema, setTema] = useState("escuro"); // Iniciando no modo escuro por padrão (estilo cinema)
 
-  // 1. Função para alternar o valor do estado
   function alternarTema() {
-    setTema((temaAtual) => (temaAtual === "claro" ? "escuro" : "claro"));
+    setTema((atual) => (atual === "claro" ? "escuro" : "claro"));
   }
 
-  // 2. Efeito colateral (useEffect) para aplicar o tema diretamente no <body>
   useEffect(() => {
     if (tema === "escuro") {
-      document.body.style.backgroundColor = "#121212";
-      document.body.style.color = "#ffffff";
+      document.body.style.backgroundColor = "#0f172a"; // Azul ardósia escuro
+      document.body.style.color = "#f8fafc";
     } else {
-      document.body.style.backgroundColor = "#ffffff";
-      document.body.style.color = "#000000";
+      document.body.style.backgroundColor = "#f8fafc"; // Off-white limpo
+      document.body.style.color = "#0f172a";
     }
-  }, [tema]); // Esse efeito roda toda vez que o 'tema' mudar
+    document.body.style.margin = "0";
+    document.body.style.fontFamily = "'Segoe UI', Roboto, sans-serif";
+    document.body.style.transition = "all 0.3s ease";
+  }, [tema]);
 
   return (
-    // 3. Disponibilizamos o estado e a função para quem quiser ouvir
     <ThemeContext.Provider value={{ tema, alternarTema }}>
       {children}
     </ThemeContext.Provider>
