@@ -4,8 +4,9 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Favoritos from "./pages/Favoritos";
+import DetalhesFilme from "./pages/DetalhesFilme"; // 1. IMPORTAR A NOVA PÁGINA
 import Header from "./components/Header";
-import RotaProtegida from "./routes/RotaProtegida"; // 1. Importa a nova rota protegida
+import RotaProtegida from "./routes/RotaProtegida";
 
 function App() {
   return (
@@ -15,11 +16,14 @@ function App() {
           <Header /> 
           <div style={{ padding: "20px" }}>
             <Routes>
-              {/* Rotas Públicas: Qualquer pessoa pode acessar */}
+              {/* Rotas Públicas */}
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
+              
+              {/* AQUI ESTÁ A NOVA ROTA DINÂMICA DO PASSO 7: */}
+              <Route path="/filme/:id" element={<DetalhesFilme />} />
 
-              {/* Rotas Protegidas: Só quem passou pelo filtro da RotaProtegida */}
+              {/* Rotas Protegidas */}
               <Route element={<RotaProtegida />}>
                 <Route path="/favoritos" element={<Favoritos />} />
               </Route>
