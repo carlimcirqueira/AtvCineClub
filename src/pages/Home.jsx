@@ -1,56 +1,41 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { obterTodosOsFilmes } from "../services/filmeService";
-import { ThemeContext } from "../contexts/ThemeContext";
+
+// Lista com 12 filmes de Dragon Ball integrada diretamente no arquivo da Home
+const FILMES_DRAGON_BALL = [
+  { id: "db-1", titulo: "Dragon Ball: A Lenda de Shenlong (1986)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=A+Lenda+de+Shenlong" },
+  { id: "db-2", titulo: "Dragon Ball: O Castelo do Diabo (1987)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=O+Castelo+do+Diabo" },
+  { id: "db-3", titulo: "Dragon Ball: Uma Aventura Mística (1988)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=Aventura+Mistica" },
+  { id: "db-4", titulo: "Dragon Ball Z: Devolva-me meu Gohan!! (1989)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=Devolva-me+meu+Gohan" },
+  { id: "db-5", titulo: "Dragon Ball Z: O Homem Mais Forte do Mundo (1990)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=O+Homem+Mais+Forte" },
+  { id: "db-6", titulo: "Dragon Ball Z: A Árvore do Poder (1990)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=A+Arvore+do+Poder" },
+  { id: "db-7", titulo: "Dragon Ball Z: O Super Saiyajin Goku (1991)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=O+Super+Saiyajin+Goku" },
+  { id: "db-8", titulo: "Dragon Ball Z: Uma Vingança Para Cooler (1991)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=Vinganca+Para+Cooler" },
+  { id: "db-9", titulo: "Dragon Ball Z: O Retorno de Cooler (1992)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=O+Retorno+de+Cooler" },
+  { id: "db-10", titulo: "Dragon Ball Z: O Retorno dos Androides (1992)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=Retorno+dos+Androides" },
+  { id: "db-11", titulo: "Dragon Ball Super: Broly (2018)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=DB+Super:+Broly" },
+  { id: "db-12", titulo: "Dragon Ball Super: Super Hero (2022)", poster: "https://placehold.co/400x600/f59e0b/ffffff?text=Super+Hero" }
+];
 
 export default function Home() {
   const [filmes, setFilmes] = useState([]);
-  const { tema } = useContext(ThemeContext);
 
   useEffect(() => {
-    setFilmes(obterTodosOsFilmes());
+    // Carrega a lista local direto no estado
+    setFilmes(FILMES_DRAGON_BALL);
   }, []);
 
   return (
-    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "30px", fontSize: "2.5rem" }}>
-        Catálogo Dragon Ball
-      </h1>
+    <div className="container">
+      <h1 className="titulo-central">Catálogo Dragon Ball</h1>
       
-      <div style={{ 
-        display: "grid", 
-        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", 
-        gap: "30px",
-        padding: "10px"
-      }}>
+      <div className="filmes-grid">
         {filmes.map((filme) => (
-          <div key={filme.id} style={{ 
-            background: tema === "claro" ? "#ffffff" : "#1e293b",
-            borderRadius: "12px", 
-            overflow: "hidden",
-            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.3)",
-            transition: "transform 0.2s ease",
-            border: tema === "claro" ? "1px solid #e2e8f0" : "1px solid #334155"
-          }}>
-            <img 
-              src={filme.poster} 
-              alt={filme.titulo} 
-              style={{ width: "100%", height: "360px", objectFit: "cover" }} 
-            />
-            <div style={{ padding: "20px", textAlign: "center" }}>
-              <h3 style={{ margin: "0 0 15px 0", fontSize: "1.1rem", minHeight: "50px" }}>{filme.titulo}</h3>
-              <Link 
-                to={`/filme/${filme.id}`} 
-                style={{ 
-                  display: "block", 
-                  padding: "10px", 
-                  background: "#f59e0b", // Laranja Dragon Ball
-                  color: "#fff", 
-                  textDecoration: "none", 
-                  borderRadius: "6px",
-                  fontWeight: "bold"
-                }}
-              >
+          <div key={filme.id} className="filme-card">
+            <img src={filme.poster} alt={filme.titulo} className="filme-poster" />
+            <div className="filme-corpo">
+              <h3 className="filme-titulo">{filme.titulo}</h3>
+              <Link to={`/filme/${filme.id}`} className="btn-laranja">
                 Ver Detalhes
               </Link>
             </div>

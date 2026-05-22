@@ -1,12 +1,10 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
-import { ThemeContext } from "../contexts/ThemeContext";
+import { AuthContext } from "../contexts/AuthContext"; 
 
 export default function Login() {
   const [nomeInput, setNomeInput] = useState("");
-  const { login } = useContext(AuthContext);
-  const { tema } = useContext(ThemeContext);
+  const { login } = useContext(AuthContext); 
   const navigate = useNavigate();
 
   function handleSubmit(e) {
@@ -17,18 +15,9 @@ export default function Login() {
   }
 
   return (
-    <div style={{ 
-      maxWidth: "400px", 
-      margin: "80px auto", 
-      padding: "40px 30px",
-      background: tema === "claro" ? "#ffffff" : "#1e293b",
-      borderRadius: "16px",
-      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-      textAlign: "center",
-      border: tema === "claro" ? "1px solid #e2e8f0" : "1px solid #334155"
-    }}>
-      <h1 style={{ margin: "0 0 10px 0", fontSize: "1.8rem" }}>👋 Bem-vindo!</h1>
-      <p style={{ color: "#94a3b8", marginBottom: "30px" }}>Faça login para salvar seus favoritos</p>
+    <div className="login-card">
+      <h1>👋 Bem-vindo!</h1>
+      <p className="login-subtitulo">Faça login para salvar seus favoritos</p>
       
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <input
@@ -36,27 +25,9 @@ export default function Login() {
           placeholder="Como quer ser chamado?"
           value={nomeInput}
           onChange={(e) => setNomeInput(e.target.value)}
-          style={{ 
-            padding: "12px", 
-            borderRadius: "8px", 
-            border: "1px solid #475569",
-            background: tema === "claro" ? "#fff" : "#0f172a",
-            color: tema === "claro" ? "#000" : "#fff",
-            fontSize: "1rem"
-          }}
+          className="login-input"
         />
-        <button type="submit" style={{ 
-          padding: "12px", 
-          background: "#f59e0b", 
-          color: "#fff", 
-          border: "none", 
-          borderRadius: "8px", 
-          fontWeight: "bold",
-          fontSize: "1rem",
-          cursor: "pointer"
-        }}>
-          Entrar no Clube
-        </button>
+        <button type="submit" className="btn-laranja">Entrar no Clube</button>
       </form>
     </div>
   );
